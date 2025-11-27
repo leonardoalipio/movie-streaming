@@ -1,0 +1,89 @@
+package utils
+
+import (
+	"context"
+	"os"
+	"time"
+
+	"github.com/golang-jwt/jwt/v5"
+	"github.com/leonardoalipio/movie-streaming/server/database"
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
+)
+
+type SignedDetails struct {
+	Email     string
+	FirstName string
+	LastName  string
+	UserID    string
+	Role      string
+	jwt.RegisteredClaims
+}
+
+var userCollection *mongo.Collection = database.OpenCollection("users")
+var SECRET_KEY = os.Getenv("SECRET_KEY")
+var SECRET_REFRESH_KEY = os.Getenv("SECRET_REFRESH_KEY")
+
+func GenerateAllTokens(email, firstName, lastName, userID, role string) (string, string, error) {
+	claims := &SignedDetails{
+		Email:     email,
+		FirstName: firstName,
+		LastName:  lastName,
+		UserID:    userID,
+		Role:      role,
+		RegisteredClaims: jwt.RegisteredClaims{
+			Issuer:    "MovieStream",
+			IssuedAt:  jwt.NewNumericDate(time.Now()),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 24)),
+		},
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	singnedToken, err := token.SignedString([]byte(SECRET_KEY))
+	if err != nil {
+		return "", "", err
+	}
+
+	refreshClaims := &SignedDetails{
+		Email:     email,
+		FirstName: firstName,
+		LastName:  lastName,
+		UserID:    userID,
+		Role:      role,
+		RegisteredClaims: jwt.RegisteredClaims{
+			Issuer:    "MovieStream",
+			IssuedAt:  jwt.NewNumericDate(time.Now()),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 7 * 24)),
+		},
+	}
+
+	refreshToken := jwt.NewWithClaims(jwt.SigningMethodHS256, refreshClaims)
+	singnedRefreshToken, err := refreshToken.SignedString([]byte(SECRET_REFRESH_KEY))
+	if err != nil {
+		return "", "", err
+	}
+
+	return singnedToken, singnedRefreshToken, nil
+}
+
+func UpdateAllTokens(userId, token, refreshToken string) error {
+	var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
+
+	updateAt, _ := time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
+
+	updateData := bson.M{
+		"$set": bson.M{
+			"token":         token,
+			"refresh_token": refreshToken,
+			"updated_at":    updateAt,
+		},
+	}
+
+	_, err := userCollection.UpdateOne(ctx, bson.M{"user_id": userId}, updateData)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
