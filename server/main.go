@@ -4,20 +4,16 @@ import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
-	"github.com/leonardoalipio/movie-streaming/server/controllers"
+	"github.com/leonardoalipio/movie-streaming/server/routes"
 )
 
 func main() {
 
 	router := gin.Default()
 
-	router.GET("/movies", controllers.GetMovies())
-	router.GET("/movie/:imdb_id", controllers.GetMovie())
-	router.POST("/addmovie", controllers.AddMovie())
-	router.POST("/register", controllers.RegisterUser())
-	router.POST("/login", controllers.LoginUser())
+	routes.SetupUnprotectedRoutes(router)
+	routes.SetupProtectedRoutes(router)
 
 	fmt.Println("Server is running...")
 	router.Run(":8080")
-
 }

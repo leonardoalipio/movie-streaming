@@ -92,3 +92,27 @@ func AddMovie() gin.HandlerFunc {
 		c.JSON(http.StatusCreated, result)
 	}
 }
+
+func AdminReviewUpdate() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		movieID := c.Param("imdb_id")
+		if movieID == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Movie ID is required"})
+			return
+		}
+
+		var req struct {
+			AdminReview string `json:"review" validate:"required"`
+		}
+
+		var res struct {
+			RankingName string `json:"ranking_name"`
+			AdminReview string `json:"admin_review"`
+		}
+
+		if err := c.ShouldBind(&req); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
+			return
+		}
+	}
+}
