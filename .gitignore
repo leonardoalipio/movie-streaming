@@ -1,0 +1,4 @@
+# Environment files
+server/.env
+.env
+*.env

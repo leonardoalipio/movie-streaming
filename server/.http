@@ -1,0 +1,81 @@
+@baseUrl = http://localhost:8080
+
+### Auth
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "usuario@exemplo.com",
+    "password": "senha123"
+}
+
+###
+
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+    "name": "Nome do Usuário",
+    "email": "usuario@exemplo.com",
+    "password": "senha123"
+}
+
+### Users
+GET {{baseUrl}}/users
+
+###
+
+GET {{baseUrl}}/users/{{userId}}
+
+### Movies
+GET {{baseUrl}}/movies
+
+###
+
+GET {{baseUrl}}/movies/{{movieId}}
+
+###
+
+POST {{baseUrl}}/movies
+Content-Type: application/json
+
+{
+    "title": "Título do Filme",
+    "description": "Descrição do filme",
+    "genre": "Ação",
+    "release_year": 2025
+}
+
+###
+
+PUT {{baseUrl}}/movies/{{movieId}}
+Content-Type: application/json
+
+{
+    "title": "Título Atualizado",
+    "description": "Descrição atualizada"
+}
+
+###
+
+DELETE {{baseUrl}}/movies/{{movieId}}
+
+### Streams
+GET {{baseUrl}}/streams
+
+###
+
+GET {{baseUrl}}/streams/{{streamId}}
+
+### Subscriptions
+GET {{baseUrl}}/subscriptions
+
+###
+
+POST {{baseUrl}}/subscriptions
+Content-Type: application/json
+
+{
+    "user_id": "{{userId}}",
+    "plan": "premium"
+}
