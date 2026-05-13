@@ -1,81 +1,98 @@
 @baseUrl = http://localhost:8080
+@movieId = tt7131622
 
 ### Auth
-POST {{baseUrl}}/auth/login
+POST {{baseUrl}}/login
 Content-Type: application/json
 
 {
-    "email": "usuario@exemplo.com",
-    "password": "senha123"
+    "email": "craigdenton@hotmail.com",
+    "password": "Password1!"
 }
 
 ###
 
-POST {{baseUrl}}/auth/register
+POST {{baseUrl}}/register
 Content-Type: application/json
 
 {
-    "name": "Nome do Usuário",
-    "email": "usuario@exemplo.com",
-    "password": "senha123"
+  "first_name": "Craig",
+  "last_name": "Denton",
+  "email": "leoalipio@hotmail.com",
+  "password": "Password1!",
+  "role": "USER",
+  "token": "",
+  "refresh_token": "",
+  "favourite_genres": [
+    {
+      "genre_id": 1,
+      "genre_name": "Comedy"
+    },
+    {
+      "genre_id": 5,
+      "genre_name": "Thriller"
+    },
+    {
+      "genre_id": 6,
+      "genre_name": "Sci-Fi"
+    }
+  ]
 }
+
 
 ### Users
 GET {{baseUrl}}/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFbWFpbCI6ImNyYWlnZGVudG9uQGhvdG1haWwuY29tIiwiRmlyc3ROYW1lIjoiQ3JhaWciLCJMYXN0TmFtZSI6IkRlbnRvbiIsIlVzZXJJRCI6IjZhMDRjYzBmZmRmZGM2ZDBiNTlkY2Y0MCIsIlJvbGUiOiJBRE1JTiIsImlzcyI6Ik1vdmllU3RyZWFtIiwiZXhwIjoxNzc4Nzk3NDMzLCJpYXQiOjE3Nzg3MTEwMzN9.PY-KsboU3pU66_ffWtiyFQuL-hxwyDHakxklrQzn7cE
 
-###
-
-GET {{baseUrl}}/users/{{userId}}
 
 ### Movies
 GET {{baseUrl}}/movies
 
-###
+###Movie by Id
+GET {{baseUrl}}/movie/{{movieId}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFbWFpbCI6ImNyYWlnZGVudG9uQGhvdG1haWwuY29tIiwiRmlyc3ROYW1lIjoiQ3JhaWciLCJMYXN0TmFtZSI6IkRlbnRvbiIsIlVzZXJJRCI6IjZhMDRjYzBmZmRmZGM2ZDBiNTlkY2Y0MCIsIlJvbGUiOiJBRE1JTiIsImlzcyI6Ik1vdmllU3RyZWFtIiwiZXhwIjoxNzc4Nzk3NDMzLCJpYXQiOjE3Nzg3MTEwMzN9.PY-KsboU3pU66_ffWtiyFQuL-hxwyDHakxklrQzn7cE
 
-GET {{baseUrl}}/movies/{{movieId}}
 
-###
+###RecommendedMovies
+GET {{baseUrl}}/recommendedmovies
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFbWFpbCI6ImNyYWlnZGVudG9uQGhvdG1haWwuY29tIiwiRmlyc3ROYW1lIjoiQ3JhaWciLCJMYXN0TmFtZSI6IkRlbnRvbiIsIlVzZXJJRCI6IjZhMDRjYzBmZmRmZGM2ZDBiNTlkY2Y0MCIsIlJvbGUiOiJBRE1JTiIsImlzcyI6Ik1vdmllU3RyZWFtIiwiZXhwIjoxNzc4Nzk3NDMzLCJpYXQiOjE3Nzg3MTEwMzN9.PY-KsboU3pU66_ffWtiyFQuL-hxwyDHakxklrQzn7cE
 
-POST {{baseUrl}}/movies
+
+###AdminReviewUpdate
+PATCH {{baseUrl}}/updatereview/{{movieId}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFbWFpbCI6ImNyYWlnZGVudG9uQGhvdG1haWwuY29tIiwiRmlyc3ROYW1lIjoiQ3JhaWciLCJMYXN0TmFtZSI6IkRlbnRvbiIsIlVzZXJJRCI6IjZhMDRjYzBmZmRmZGM2ZDBiNTlkY2Y0MCIsIlJvbGUiOiJBRE1JTiIsImlzcyI6Ik1vdmllU3RyZWFtIiwiZXhwIjoxNzc4Nzk3NDMzLCJpYXQiOjE3Nzg3MTEwMzN9.PY-KsboU3pU66_ffWtiyFQuL-hxwyDHakxklrQzn7cE
 Content-Type: application/json
 
 {
-    "title": "Título do Filme",
-    "description": "Descrição do filme",
-    "genre": "Ação",
-    "release_year": 2025
+  "admin_review": "This movie is bad. Don't waste your time watching it."
+}
+
+###AddMovie
+POST {{baseUrl}}/addmovie
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFbWFpbCI6ImNyYWlnZGVudG9uQGhvdG1haWwuY29tIiwiRmlyc3ROYW1lIjoiQ3JhaWciLCJMYXN0TmFtZSI6IkRlbnRvbiIsIlVzZXJJRCI6IjZhMDRjYzBmZmRmZGM2ZDBiNTlkY2Y0MCIsIlJvbGUiOiJBRE1JTiIsImlzcyI6Ik1vdmllU3RyZWFtIiwiZXhwIjoxNzc4Nzk3NDMzLCJpYXQiOjE3Nzg3MTEwMzN9.PY-KsboU3pU66_ffWtiyFQuL-hxwyDHakxklrQzn7cE
+
+{
+    "imdb_id": "tt0102034",
+    "title": "Highlander 2: The Quickening",
+    "poster_path": "https://image.tmdb.org/t/p/original/gFPIgpwtnsiq6AG5HlgOzK1TNke.jpg",
+    "youtube_id": "pRgJVvoihCQ",
+    "genre": [
+        {
+            "genre_id": 6,
+            "genre_name": "Sci-fi"
+        },
+        {
+            "genre_id": 4,
+            "genre_name": "Fantasy"
+        }
+    ],
+    "admin_review": "",
+    "ranking": {
+        "ranking_value": 4,
+        "ranking_name": "Bad"
+    }
 }
 
 ###
 
-PUT {{baseUrl}}/movies/{{movieId}}
-Content-Type: application/json
-
-{
-    "title": "Título Atualizado",
-    "description": "Descrição atualizada"
-}
-
-###
-
-DELETE {{baseUrl}}/movies/{{movieId}}
-
-### Streams
-GET {{baseUrl}}/streams
-
-###
-
-GET {{baseUrl}}/streams/{{streamId}}
-
-### Subscriptions
-GET {{baseUrl}}/subscriptions
-
-###
-
-POST {{baseUrl}}/subscriptions
-Content-Type: application/json
-
-{
-    "user_id": "{{userId}}",
-    "plan": "premium"
-}
